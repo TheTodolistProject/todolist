@@ -37,4 +37,4 @@ Route::apiResource('project' ,ProjectController::class);
 
 
 
-Route::put('test' ,[TestController::class , 'index'] );
+Route::get('test' ,[TestController::class , 'index'] );
