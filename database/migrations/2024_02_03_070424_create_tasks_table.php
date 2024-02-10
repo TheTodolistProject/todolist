@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TaskStatusEnum;
 use App\Models\Project;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('detail');
-            $table->string('slug')->unique();
-            $table->boolean('status')->default(0);
-            $table->foreignIdFor(Project::class);
+            $table->boolean('status')->default(TaskStatusEnum::NotStarted);
+            $table->foreignIdFor(Project::class)->nullable();
             $table->dateTime('start_date');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

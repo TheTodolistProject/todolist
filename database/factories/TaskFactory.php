@@ -26,7 +26,6 @@ class TaskFactory extends Factory
             'title' => $title,
             'project_id' => $project->id,
             'status' => fake()->boolean(),
-            'slug' => Str::slug($title , '-'),
             'detail' => fake()->text(200),
             'start_date' => fake()->dateTimeThisYear(),
         ];

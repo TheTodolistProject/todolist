@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 */
 Route::middleware('auth:sanctum')->group(function (){
     Route::post('logout' ,[LoginController::class , 'logout'])->name('logout');
+    Route::apiResource('task' ,TaskController::class);
+    Route::apiResource('project' ,ProjectController::class);
 
 });
 
@@ -32,8 +34,6 @@ Route::controller(UserController::class)->group(function () {
     Route::delete('/user/{user:slug}', 'destroy');
 });
 
-Route::apiResource('task' ,TaskController::class);
-Route::apiResource('project' ,ProjectController::class);
 
 
 

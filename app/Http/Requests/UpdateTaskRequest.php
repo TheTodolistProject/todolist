@@ -11,7 +11,7 @@ class UpdateTaskRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,9 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|max:20',
+            'detail' => 'required|string|max:500',
+            'start_date' => 'date|date_format:Y-m-d H:i:s',
         ];
     }
 }

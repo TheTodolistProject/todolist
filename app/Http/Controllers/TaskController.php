@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -13,23 +14,18 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        return TaskResource::collection($user->tasks()->get());
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        $user = auth()->user();
+        $task = Task::create($request->all());
+        $user->tasks()->save($task);
+        return response()->json(['message' => 'task created!'] , 201);
     }
 
     /**
@@ -37,15 +33,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Task $task)
-    {
-        //
+        return TaskResource::make($task);
     }
 
     /**
@@ -53,7 +41,8 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        $task->updateOrFail($request->all());
+        return response()->json(['message' => 'task updated!'] , 200);
     }
 
     /**
@@ -61,6 +50,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->deleteOrFail();
+        return response()->json(['message' => 'task deleted!'] , 200);
+
     }
 }
