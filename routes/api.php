@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Calendartask;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -23,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::apiResource('task' ,TaskController::class);
     Route::apiResource('project' ,ProjectController::class);
     Route::apiResource('users' , UserController::class)->except(['index' , 'store']);
+    Route::get('calendar-tasks' , [Calendartask::class , 'list']);
 
 });
 
