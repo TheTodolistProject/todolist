@@ -22,19 +22,10 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::post('logout' ,[LoginController::class , 'logout'])->name('logout');
     Route::apiResource('task' ,TaskController::class);
     Route::apiResource('project' ,ProjectController::class);
+    Route::apiResource('users' , UserController::class)->except(['index' , 'store']);
 
 });
 
 Route::post('sign-up' ,[LoginController::class , 'register'] )->name('sign-up');
 Route::post('login' ,[LoginController::class , 'login'] )->name('login');
-
-Route::controller(UserController::class)->group(function () {
-    Route::get('/user/{user:slug}', 'show');
-    Route::put('/user/{user:slug}', 'update');
-    Route::delete('/user/{user:slug}', 'destroy');
-});
-
-
-
-
 Route::get('test' ,[TestController::class , 'index'] );

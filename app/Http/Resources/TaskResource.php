@@ -19,7 +19,6 @@ class TaskResource extends JsonResource
             'id'         =>$this->id,
             'title'      => $this->title,
             'detail'     =>$this->detail,
-            'slug'       => $this->slug,
             'status'     =>TaskStatusEnum::getDescription($this->status),
             'start_date' =>$this->start_date,
         ];

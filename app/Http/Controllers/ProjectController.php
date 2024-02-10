@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TaskStatusEnum;
+use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
@@ -13,15 +15,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $user = auth()->user();
+        return ProjectResource::collection($user->projects()->get());
     }
 
     /**
@@ -29,7 +24,11 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $user = auth()->user();
+        $project = Project::create($request->all());
+        $user->projects()->attach($project);
+        return response()->json(['message' => 'project created!'] , 201);
+
     }
 
     /**
@@ -37,15 +36,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Project $project)
-    {
-        //
+        return ProjectResource::make($project);
     }
 
     /**
@@ -53,7 +44,9 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $project->updateOrFail($request->all());
+        return response()->json(['message' => 'project updated'] , 201);
+
     }
 
     /**
@@ -61,6 +54,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->deleteOrFail();
+        return response()->json(['message' => 'project deleted.... :( '] , 200);
     }
 }

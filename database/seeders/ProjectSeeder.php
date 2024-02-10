@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Enums\TaskStatusEnum;
 use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Log;
 
 class ProjectSeeder extends Seeder
 {
