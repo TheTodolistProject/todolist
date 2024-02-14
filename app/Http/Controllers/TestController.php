@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TaskStatusEnum;
+use App\Models\Task;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
@@ -12,8 +13,10 @@ class TestController extends Controller
 {
     public function index(Request $request)
     {
-//      dd($request);
-        dd($request->file('image'));
+        $task = Task::first();
+        dd($task->project()->count());
+//        dd($request);
+//        dd($request->file('image'));
 
 //        dd(Carbon::now()->addDay(env('API_EXPIRATION_DAY')));
 //        $user = User::find($request->user_id);

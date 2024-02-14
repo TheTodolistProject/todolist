@@ -14,12 +14,12 @@ class UserTaskSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::all();
-
-        foreach ($users as $user){
-            $task = Task::inRandomOrder()->first();
-            $user->tasks()->attach($task);
-
-        }
+//        $users = User::all();
+//
+//        foreach ($users as $user){
+//            $task = Task::inRandomOrder()->first();
+//            $user->tasks()->attach($task);
+//
+//        }
     }
 }

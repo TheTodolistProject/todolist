@@ -15,12 +15,12 @@ class UserProjectSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::all();
-
-        foreach ($users as $user){
-            $project = Project::inRandomOrder()->first();
-            $user->projects()->attach($project);
-
-        }
+//        $users = User::all();
+//
+//        foreach ($users as $user){
+//            $project = Project::inRandomOrder()->first();
+//            $user->projects()->attach($project);
+//
+//        }
     }
 }

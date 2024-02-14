@@ -16,17 +16,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = [
-            'fname'=>'matin',
-            'lname'=>'nejatbakhsh',
-            'email'=>'asd@gmail.com',
-            'password'=>Hash::make('password')
-        ];
-        User::create($user);
-
         User::factory()
-           ->count(40)
-           ->create();
+            ->count(20)
+            ->hasTasks(3)
+            ->hasProjects(3)
+            ->create();
 
     }
 

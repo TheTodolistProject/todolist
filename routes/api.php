@@ -28,6 +28,6 @@ Route::middleware('auth:sanctum')->group(function (){
 
 });
 
-Route::post('sign-up' ,[LoginController::class , 'register'] )->name('sign-up');
+Route::post('register' ,[LoginController::class , 'register'] )->name('register');
 Route::post('login' ,[LoginController::class , 'login'] )->name('login');
 Route::get('test' ,[TestController::class , 'index'] );
