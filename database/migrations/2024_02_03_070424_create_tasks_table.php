@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->longText('detail');
-            $table->boolean('status')->default(TaskStatusEnum::NotStarted);
+            $table->integer('status')->default(TaskStatusEnum::NotStarted);
             $table->foreignIdFor(Project::class)->nullable();
             $table->dateTime('start_date');
             $table->softDeletes();

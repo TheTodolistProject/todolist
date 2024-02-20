@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserInformationResource;
 use App\Models\User;
+use App\Services\SearchUsersService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Storage;
@@ -67,5 +68,11 @@ class UserController extends Controller
         if ($user->delete()){
             return response()->json(['message' =>'deleted'],200);
         };
+    }
+
+    public function searchUser($text)
+    {
+        $users = SearchUsersService::SearchUsers($text);
+        return UserInformationResource::collection($users);
     }
 }

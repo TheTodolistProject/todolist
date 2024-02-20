@@ -26,8 +26,22 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::apiResource('users' , UserController::class)->except(['index' , 'store']);
     Route::get('calendar-tasks' , [Calendartask::class , 'list']);
 
+    Route::get('search-users/{text}' , [UserController::class , 'searchUser'])->name('search-users');
+    Route::get('search-tasks/{text}' , [TaskController::class , 'searchTask'])->name('search-tasks');
+
+    Route::post('assign-user-to-task/{task}' , [TaskController::class , 'assignUser'])->name('assign-user');
+    Route::post('unassign-user-from-task/{task}/{user}' , [TaskController::class , 'unassignUser'])->name('unassign-user');
+
+    Route::get('/asd' , function(){
+        dd('hi from authenticated root!!');
+    });
+
 });
 
 Route::post('register' ,[LoginController::class , 'register'] )->name('register');
 Route::post('login' ,[LoginController::class , 'login'] )->name('login');
+
 Route::get('test' ,[TestController::class , 'index'] );
+Route::get('/' , function(){
+    dd('hi from root!!');
+});

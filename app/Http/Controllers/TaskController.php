@@ -6,6 +6,9 @@ use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\User;
+use App\Services\SearchTaskService;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -53,5 +56,44 @@ class TaskController extends Controller
         $task->deleteOrFail();
         return response()->json(['message' => 'task deleted!'] , 200);
 
+    }
+
+    public function searchTask($text)
+    {
+     $tasks = SearchTaskService::searchTasks($text);
+      return TaskResource::collection($tasks);
+    }
+
+    public function assignUser(Task $task , Request $request)
+    {
+        $foundusers = collect();
+
+        foreach ($request->users as $slug){
+           $foundusers->push(User::where('slug' , $slug)->first()->id);
+        }
+
+        if ($foundusers->isEmpty()) {
+            return response()->json(['message' => 'users not found'] , 404);
+        }
+        else{
+            $done = $task->users()->syncWithoutDetaching($foundusers);
+            if ($done){
+                return response()->json(['message' => 'attached!'] , 200);
+            }
+            else{
+                return response()->json(['message' => 'error attaching!'] ,500);
+            }
+        }
+    }
+
+    public function unassignUser(Task $task , User $user)
+    {
+        $done = $task->users()->detach($user);
+        if ($done){
+            return response()->json(['message' => 'detached!'] , 200);
+        }
+        else{
+            return response()->json(['message' => 'error detaching!'] ,500);
+        }
     }
 }

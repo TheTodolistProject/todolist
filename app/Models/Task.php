@@ -19,6 +19,9 @@ class Task extends Model
         'project_id',
         'start_date',
     ];
+    protected $casts = [
+      'status' => 'integer'
+    ];
 
     public function users():BelongsToMany
     {

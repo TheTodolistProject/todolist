@@ -31,6 +31,8 @@ class LoginTest extends TestCase
         $response->assertJson(fn (AssertableJson $json) =>
         $json->hasAll(['message','token'])
         );
+        $token =$user->tokens()->first();
+        $this->assertTrue($token->expires_at > $token->created_at);
     }
 
     public function test_Unregistered_User_Cant_Login()
