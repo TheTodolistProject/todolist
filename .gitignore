@@ -8,6 +8,8 @@
 .env
 .env.backup
 .env.production
+.env.testing
+.env.example
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -17,10 +19,4 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/public
-.env.example
-.htaccess
-favicon.ico
-index.php
-robots.txt
 /app/Http/Controllers/TestController.php

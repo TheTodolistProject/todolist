@@ -7,6 +7,8 @@ use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Models\Task;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
@@ -36,7 +38,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return ProjectResource::make($project);
+        return ProjectResource::make($project->load(['tasks' ,'users']));
     }
 
     /**
@@ -56,5 +58,34 @@ class ProjectController extends Controller
     {
         $project->deleteOrFail();
         return response()->json(['message' => 'project deleted.... :( '] , 200);
+    }
+
+    public function assignTask(Project $project , Request $request)
+    {
+        $foundtasks = collect();
+        foreach ($request->tasks as $task){
+            $foundtasks->push(Task::where('id' , $task)->get());
+        }
+        $collapsed = $foundtasks->collapse();
+
+        if ($collapsed->isEmpty())
+        {
+            return response()->json(['message' => 'tasks not found! :('] , 404);
+        }
+        else
+        {
+            $done = $project->tasks()->saveMany($collapsed);
+            if ($done){
+                   return response()->json(['message' => 'tasks assigned!'] , 200);
+            }
+            else{
+                return response()->json(['message' => 'something was wrong :('] ,500);
+            }
+        }
+    }
+
+    public function unassignTask()
+    {
+
     }
 }
