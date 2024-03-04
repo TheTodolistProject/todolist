@@ -28,13 +28,13 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::get('calendar-tasks' , [Calendartask::class , 'list']);
 
     Route::get('search-users/{text}' , [UserController::class , 'searchUser'])->name('search-users');
-    Route::get('search-tasks/{text}' , [TaskController::class , 'searchTask'])->name('search-tasks');
+    Route::get('search-tasks' , [TaskController::class , 'searchTask'])->name('search-tasks');
 
     Route::post('assign-user-to-task/{task}' , [TaskController::class , 'assignUser'])->name('assign-user');
     Route::delete('unassign-user-from-task/{task}/{user}' , [TaskController::class , 'unassignUser'])->name('unassign-user');
 
     Route::post('assign-task-to-project/{project}' , [ProjectController::class , 'assignTask'])->name('assign-task');
-    Route::delete('unassign-task-from-project/{project}/{user}' , [ProjectController::class , 'unassignTask'])->name('unassign-task');
+    Route::delete('unassign-task-from-project/{project}/{task}' , [ProjectController::class , 'unassignTask'])->name('unassign-task');
 
     Route::get('/asd' , function(){
         dd('hi from authenticated root!!');

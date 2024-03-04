@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -18,7 +19,7 @@ class ProjectController extends Controller
     public function index()
     {
         $user = auth()->user();
-        return ProjectResource::collection($user->projects()->get());
+        return ProjectResource::collection($user->projects()->with(['tasks' , 'users'])->get());
     }
 
     /**
@@ -38,7 +39,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return ProjectResource::make($project->load(['tasks' ,'users']));
+        return ProjectResource::make($project->load(['tasks','users']));
     }
 
     /**
@@ -84,8 +85,14 @@ class ProjectController extends Controller
         }
     }
 
-    public function unassignTask()
+    public function unassignTask(Project $project , Task $task)
     {
-
+        $done = $task->project()->dissociate($project)->save();
+        if ($done){
+            return response()->json(['message' => 'detached!'] , 200);
+        }
+        else{
+            return response()->json(['message' => 'error detaching!'] ,500);
+        }
     }
 }

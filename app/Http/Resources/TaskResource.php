@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Enums\TaskStatusEnum;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,6 +22,8 @@ class TaskResource extends JsonResource
             'detail'     =>$this->detail,
             'status'     =>TaskStatusEnum::getDescription($this->status),
             'start_date' =>$this->start_date,
+            'users'      =>UserInformationResource::collection($this->whenLoaded('users')),
+            'project'    => new ProjectResource($this->whenLoaded('project')),
         ];
     }
 }

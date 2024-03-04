@@ -29,8 +29,8 @@ class ProjectResource extends JsonResource
           'progress'      => $progress,
           'start_date'    => $this->start_date,
           'deadline_date' => $this->deadline_date,
-          'tasks'         => TaskResource::collection($this->tasks),
-          'users'         => UserInformationResource::collection($this->users)
+          'tasks'         => TaskResource::collection($this->whenLoaded('tasks')),
+          'users'         => UserInformationResource::collection($this->whenLoaded('users'))
         ];
     }
 }

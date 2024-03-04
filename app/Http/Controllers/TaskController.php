@@ -18,7 +18,7 @@ class TaskController extends Controller
     public function index()
     {
         $user = auth()->user();
-        return TaskResource::collection($user->tasks()->get());
+        return TaskResource::collection($user->tasks()->with(['users','project'])->get());
     }
     /**
      * Store a newly created resource in storage.
@@ -36,7 +36,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return TaskResource::make($task);
+        return TaskResource::collection($task->with(['users' , 'project'])->get());
     }
 
     /**
@@ -58,9 +58,9 @@ class TaskController extends Controller
 
     }
 
-    public function searchTask($text)
+    public function searchTask(Request $request)
     {
-     $tasks = SearchTaskService::searchTasks($text);
+     $tasks = SearchTaskService::searchTasks($request->query('search'));
       return TaskResource::collection($tasks);
     }
 
