@@ -1,0 +1,38 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Daytask Documentation",
+        "contact": {
+            "email": "matinnjt2000@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/task": {
+            "get": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Get User Tasks",
+                "description": "Get User Tasks",
+                "operationId": "getUserTasks",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        }
+    }
+}
