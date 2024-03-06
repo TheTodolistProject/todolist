@@ -12,11 +12,46 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
+use OpenApi\Annotations as OA;
 use Str;
 
 class LoginController extends Controller
 {
 
+/**
+*
+* @OA\Post(
+*     path="/api/register",
+*     tags={"Auth"},
+*     summary="Register a new user",
+ *     operationId="registerUser",
+ *     @OA\RequestBody(
+ *         description="User registration details",
+ *         required=true,
+ *         @OA\MediaType(
+ *         mediaType="multipart/form-data",
+ *           @OA\Schema(
+ *             type="object",
+ *             @OA\Property(property="fname",example="John", description="fname field" , type="string"),
+ *             @OA\Property(property="lname", type="string", example="Doe"),
+ *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+ *             @OA\Property(property="password", type="string", format="password" ,example="@Landatrip123"),
+ *             required={"fname" , "lname" , "email" , "password"}
+ *         ),
+ *     ),
+ *     ),
+ *     @OA\Response(
+ *         @OA\JsonContent(),
+ *         response=201,
+ *         description="User registered successfully",
+ *         ),
+ *     @OA\Response(
+ *         @OA\JsonContent(),
+ *         response=400,
+ *         description="Invalid input",
+ *     )
+ * )
+ */
     public function register(RegisterRequest $request)
     {
         $user = User::create([
@@ -34,7 +69,35 @@ class LoginController extends Controller
         }
 
     }
-
+    /**
+     * @OA\Post(
+ *     path="/api/login",
+ *     tags={"Auth"},
+ *     summary="Login user",
+ *     operationId="loginUser",
+ *     @OA\RequestBody(
+ *        @OA\MediaType(
+ *         mediaType="multipart/form-data",
+ *     @OA\Schema(
+ *             type="object",
+ *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+ *             @OA\Property(property="password", type="string", format="password" ,example=""),
+     *     required={"email" , "password"}
+ *         ),
+ *     ),
+ *     ),
+ *     @OA\Response(
+ *         @OA\JsonContent(),
+ *         response=201,
+ *         description="User logged in successfully",
+ *         ),
+ *     @OA\Response(
+ *         @OA\JsonContent(),
+ *         response=400,
+ *         description="Invalid input",
+ *     )
+ * )
+ */
     public function login(LoginRequest $request)
     {
         $user = User::where('email' , $request->input('email'))->first();
@@ -60,6 +123,32 @@ class LoginController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/logout",
+     *     tags={"Auth"},
+     *     summary="Logout an authorized user",
+     *     operationId="logout",
+     *     security={{"bearer":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="User logged out successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="status", type="string", example="success"),
+     *             @OA\Property(property="message", type="string", example="User logged out successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
+     */
     public function logout()
     {
      Auth::user()->tokens()->delete();
