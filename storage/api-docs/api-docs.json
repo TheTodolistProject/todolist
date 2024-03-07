@@ -61,14 +61,6 @@
                                 "schema": {}
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Invalid input",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
                     }
                 }
             }
@@ -106,16 +98,8 @@
                     }
                 },
                 "responses": {
-                    "201": {
+                    "200": {
                         "description": "User logged in successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid input",
                         "content": {
                             "application/json": {
                                 "schema": {}
@@ -137,42 +121,14 @@
                         "description": "User logged out successfully",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "string",
-                                            "example": "success"
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "User logged out successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
+                                "schema": {}
                             }
                         }
                     }
                 },
                 "security": [
                     {
-                        "bearer": []
+                        "sanctum": []
                     }
                 ]
             }
@@ -193,14 +149,330 @@
                                 "schema": {}
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Store a Task",
+                "description": "Store a Task",
+                "operationId": "storeUserTask",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "detail"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Daytask Project"
+                                    },
+                                    "detail": {
+                                        "type": "text",
+                                        "example": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,\n     *             sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n     *             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n     *             Duis aute irure dolor datat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-02-10 12:00:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/task/{task}": {
+            "get": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Show a Task",
+                "description": "Show a Task",
+                "operationId": "showTask",
+                "parameters": [
+                    {
+                        "name": "task",
+                        "in": "path",
+                        "description": "A Task id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Update a Task",
+                "description": "Update a Task",
+                "operationId": "updateUserTask",
+                "parameters": [
+                    {
+                        "name": "task",
+                        "in": "path",
+                        "description": "A Task id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "detail",
+                                    "_method"
+                                ],
+                                "properties": {
+                                    "_method": {
+                                        "type": "string",
+                                        "default": "put"
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Daytask Project edit"
+                                    },
+                                    "detail": {
+                                        "type": "text",
+                                        "example": "Editting the detals"
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-02-10 12:00:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Delete a Task",
+                "description": "Delete a Task",
+                "operationId": "deleteUserTask",
+                "parameters": [
+                    {
+                        "name": "task",
+                        "in": "path",
+                        "description": "A Task id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/search-tasks": {
+            "get": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "search a Task",
+                "description": "Search a Task",
+                "operationId": "searchTask",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Something...",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/assign-user-to-task/{task}": {
+            "post": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Assign a User To a Task",
+                "description": "Assign a User To a Task",
+                "operationId": "assignUserToTask",
+                "parameters": [
+                    {
+                        "name": "task",
+                        "in": "path",
+                        "description": "A Task id",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "users[0]": {
+                                        "type": "string",
+                                        "example": "mr-jillian-morissette-iv-reilly"
+                                    },
+                                    "users[1]": {
+                                        "type": "string",
+                                        "example": "maximo-wolff-hickle"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/unassign-user-from-task/{task}/{user}": {
+            "delete": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Unassign a User To a Task",
+                "description": "Unassign a User To a Task",
+                "operationId": "unassignUserToTask",
+                "parameters": [
+                    {
+                        "name": "task",
+                        "in": "path",
+                        "description": "A Task id",
+                        "required": true,
+                        "example": "2"
+                    },
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "description": "A user slug",
+                        "required": true,
+                        "example": "mr-jillian-morissette-iv-reilly"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         }
     },

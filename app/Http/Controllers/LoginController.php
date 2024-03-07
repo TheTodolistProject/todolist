@@ -45,11 +45,6 @@ class LoginController extends Controller
  *         response=201,
  *         description="User registered successfully",
  *         ),
- *     @OA\Response(
- *         @OA\JsonContent(),
- *         response=400,
- *         description="Invalid input",
- *     )
  * )
  */
     public function register(RegisterRequest $request)
@@ -82,20 +77,15 @@ class LoginController extends Controller
  *             type="object",
  *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
  *             @OA\Property(property="password", type="string", format="password" ,example=""),
-     *     required={"email" , "password"}
+ *     required={"email" , "password"}
  *         ),
  *     ),
  *     ),
  *     @OA\Response(
  *         @OA\JsonContent(),
- *         response=201,
+ *         response=200,
  *         description="User logged in successfully",
  *         ),
- *     @OA\Response(
- *         @OA\JsonContent(),
- *         response=400,
- *         description="Invalid input",
- *     )
  * )
  */
     public function login(LoginRequest $request)
@@ -129,24 +119,13 @@ class LoginController extends Controller
      *     tags={"Auth"},
      *     summary="Logout an authorized user",
      *     operationId="logout",
-     *     security={{"bearer":{}}},
+     *     security={{"sanctum":{}}},
      *     @OA\Response(
      *         response=200,
      *         description="User logged out successfully",
      *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="User logged out successfully")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="message", type="string", example="Unauthorized")
-     *         )
      *     )
+     * )
      * )
      */
     public function logout()
