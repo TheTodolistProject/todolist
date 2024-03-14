@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('detail');
+            $table->float('progress');
             $table->dateTime('start_date');
             $table->dateTime('deadline_date')->nullable();
             $table->softDeletes();

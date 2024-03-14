@@ -95,4 +95,15 @@ class ProjectController extends Controller
             return response()->json(['message' => 'error detaching!'] ,500);
         }
     }
+
+    public function ongoingProjects()
+    {
+        $user = auth()->user();
+        return ProjectResource::collection($user->projects()->with('users')->where('progress' , '<' , 100)->get());
+    }
+    public function completedProjects()
+    {
+        $user = auth()->user();
+        return ProjectResource::collection($user->projects()->with('users')->whereProgress(100)->get());
+    }
 }

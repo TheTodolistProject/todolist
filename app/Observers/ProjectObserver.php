@@ -54,7 +54,11 @@ class ProjectObserver
 
     public function saving(Project $project)
     {
-//        Log::info('in saving observer');
+        $completed = $project->tasks()->whereStatus(TaskStatusEnum::Finished)->count();
+        $count = collect(TaskStatusEnum::getValues())->count();
+        if ($completed){
+             $project->progress = ($completed*100)/$count;
+        }
     }
     public function saved(Project $project)
     {

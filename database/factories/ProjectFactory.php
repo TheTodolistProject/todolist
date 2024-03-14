@@ -23,6 +23,7 @@ class ProjectFactory extends Factory
         return [
             'title' => $title,
             'detail' => fake()->text(200),
+            'progress' => fake()->numberBetween(0 , 100),
             'start_date' => fake()->dateTime(),
         ];
     }
