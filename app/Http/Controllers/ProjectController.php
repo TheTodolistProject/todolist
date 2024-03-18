@@ -29,8 +29,13 @@ class ProjectController extends Controller
     {
         $user = auth()->user();
         $project = Project::create($request->all());
-        $user->projects()->attach($project);
-        return response()->json(['message' => 'project created!'] , 201);
+        $done = $user->projects()->attach($project);
+        if ($done){
+            return response()->json(['message' => 'project created!'] , 201);
+        }
+        else{
+            return response()->json(['message' => 'something was wrong :('] ,500);
+        }
 
     }
 
@@ -47,8 +52,13 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $project->updateOrFail($request->all());
-        return response()->json(['message' => 'project updated'] , 201);
+        $updated = $project->updateOrFail($request->all());
+        if ($updated){
+            return response()->json(['message' => 'project updated'] , 201);
+        }
+        else{
+            return response()->json(['message' => 'something was wrong :('] ,500);
+        }
 
     }
 
@@ -57,8 +67,13 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        $project->deleteOrFail();
-        return response()->json(['message' => 'project deleted.... :( '] , 200);
+        $deleted = $project->deleteOrFail();
+        if ($deleted){
+            return response()->json(['message' => 'project deleted.... :( '] , 200);
+        }
+        else{
+            return response()->json(['message' => 'something was wrong :('] ,500);
+        }
     }
 
     public function assignTask(Project $project , Request $request)

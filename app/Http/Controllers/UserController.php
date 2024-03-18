@@ -67,7 +67,10 @@ class UserController extends Controller
     {
         if ($user->delete()){
             return response()->json(['message' =>'deleted'],200);
-        };
+        }
+        else{
+            return response()->json(['message' =>'not deleted'],304);
+        }
     }
 
     public function searchUser($text)

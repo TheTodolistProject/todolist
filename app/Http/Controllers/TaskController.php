@@ -67,8 +67,13 @@ class TaskController extends Controller
     {
         $user = auth()->user();
         $task = Task::create($request->all());
-        $user->tasks()->save($task);
-        return response()->json(['message' => 'task created!'] , 201);
+       $saved =  $user->tasks()->save($task);
+       if ($saved){
+           return response()->json(['message' => 'task created!'] , 201);
+       }
+         else{
+              return response()->json(['message' => 'error creating task!'] ,500);
+         }
     }
 
     /**
@@ -137,8 +142,13 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        $task->updateOrFail($request->all());
-        return response()->json(['message' => 'task updated!'] , 200);
+       $updated = $task->updateOrFail($request->all());
+        if ($updated){
+            return response()->json(['message' => 'task updated!'] , 200);
+        }
+        else{
+            return response()->json(['message' => 'error updating task!'] ,500);
+        }
     }
 
     /**
@@ -167,8 +177,13 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        $task->deleteOrFail();
-        return response()->json(['message' => 'task deleted!'] , 200);
+        $deleted = $task->deleteOrFail();
+        if ($deleted){
+            return response()->json(['message' => 'task deleted!'] , 200);
+        }
+        else{
+            return response()->json(['message' => 'error deleting task!'] ,500);
+        }
 
     }
     /**
@@ -294,5 +309,17 @@ class TaskController extends Controller
         else{
             return response()->json(['message' => 'error detaching!'] ,500);
         }
+    }
+
+    public function createGlobalTask(StoreTaskRequest $request)
+    {
+        $task = Task::create($request->validated());
+        if ($task){
+            return response()->json(['message' => 'task created!'] , 201);
+        }
+        else{
+            return response()->json(['message' => 'error creating task!'] ,500);
+        }
+
     }
 }

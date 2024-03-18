@@ -22,11 +22,13 @@ use Illuminate\Support\Facades\Route;
 */
 Route::middleware('auth:sanctum')->group(function (){
     Route::post('logout' ,[LoginController::class , 'logout'])->name('logout');
+    Route::post('create-global-task' ,[TaskController::class , 'createGlobalTask'])->name('create-global-task');
     Route::apiResource('task' ,TaskController::class);
     Route::apiResource('project' ,ProjectController::class)->except('index');
+    Route::apiResource('users' , UserController::class)->except(['index' , 'store']);
+
     Route::get('completed-projects',[ProjectController::class , 'completedProjects']);
     Route::get('ongoing-projects' , [ProjectController::class , 'ongoingProjects']);
-    Route::apiResource('users' , UserController::class)->except(['index' , 'store']);
     Route::get('calendar-tasks' , [Calendartask::class , 'list']);
 
     Route::get('search-users/{text}' , [UserController::class , 'searchUser'])->name('search-users');

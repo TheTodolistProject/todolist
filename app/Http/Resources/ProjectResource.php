@@ -15,8 +15,11 @@ class ProjectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
-
+        $count = $this->tasks()->count();
+        if ($count){
+            $completed = $this->tasks()->whereStatus(TaskStatusEnum::Finished)->count();
+            $this->progress = ($completed*100)/$count;
+        }
         return [
           'id'            => $this->id,
           'title'         => $this->title,
