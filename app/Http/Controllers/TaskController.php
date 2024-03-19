@@ -311,6 +311,44 @@ class TaskController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/create-global-task",
+     *     tags={"Tasks"},
+     *     summary="Create a global task",
+     *     operationId="createGlobalTask",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *          request="StoreTaskRequest",
+     *         description="Task creation details",
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(property="title", type="string", example="Global Task"),
+     *                 @OA\Property(property="detail", type="text", example="This is a global task"),
+     *                 @OA\Property(property="start_date", type="date", example="2025-02-10 12:00:00"),
+     *                 required={"title", "detail"}
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Task created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Task created!")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error creating task",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Error creating task!")
+     *         )
+     *     )
+     * )
+     */
     public function createGlobalTask(StoreTaskRequest $request)
     {
         $task = Task::create($request->validated());

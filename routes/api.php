@@ -25,13 +25,13 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::post('create-global-task' ,[TaskController::class , 'createGlobalTask'])->name('create-global-task');
     Route::apiResource('task' ,TaskController::class);
     Route::apiResource('project' ,ProjectController::class)->except('index');
-    Route::apiResource('users' , UserController::class)->except(['index' , 'store']);
+    Route::apiResource('user' , UserController::class)->except(['index' , 'store']);
 
     Route::get('completed-projects',[ProjectController::class , 'completedProjects']);
     Route::get('ongoing-projects' , [ProjectController::class , 'ongoingProjects']);
     Route::get('calendar-tasks' , [Calendartask::class , 'list']);
 
-    Route::get('search-users/{text}' , [UserController::class , 'searchUser'])->name('search-users');
+    Route::get('search-users' , [UserController::class , 'searchUser'])->name('search-users');
     Route::get('search-tasks' , [TaskController::class , 'searchTask'])->name('search-tasks');
 
     Route::post('assign-user-to-task/{task}' , [TaskController::class , 'assignUser'])->name('assign-user');

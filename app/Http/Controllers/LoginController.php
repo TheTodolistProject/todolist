@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
+use Log;
 use OpenApi\Annotations as OA;
 use Str;
 
@@ -130,7 +131,7 @@ class LoginController extends Controller
      */
     public function logout()
     {
-     Auth::user()->tokens()->delete();
-     return response()->json('Bye 🤞🤞🤞' ,200);
+        request()->user()->currentAccessToken()->delete();
+       return response()->json('Bye 🤞🤞🤞' ,200);
     }
 }

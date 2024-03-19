@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
+use Log;
 use Mockery;
 use Tests\TestCase;
 use App\Services\CreatingTokenService;
@@ -18,7 +19,7 @@ class LogoutTest extends TestCase
     public function test_Unauthenticated_User_Cant_Logout(): void
     {
         $user = User::factory()->create();
-        $response = $this->actingAs($user)->postJson('/api/logout');
+        $response = $this->actingAs($user)->post('/api/logout');
         $response->assertStatus(200);
     }
 
