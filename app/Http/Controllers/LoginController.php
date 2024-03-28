@@ -76,8 +76,8 @@ class LoginController extends Controller
  *         mediaType="multipart/form-data",
  *     @OA\Schema(
  *             type="object",
- *             @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
- *             @OA\Property(property="password", type="string", format="password" ,example=""),
+ *             @OA\Property(property="email", type="string", format="email", example="matinnjt2000@gmail.com"),
+ *             @OA\Property(property="password", type="string", format="password" ),
  *     required={"email" , "password"}
  *         ),
  *     ),

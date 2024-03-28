@@ -16,11 +16,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()
-            ->count(20)
-            ->hasTasks(3)
-            ->hasProjects(3)
-            ->create();
+//        User::factory()
+//            ->count(20)
+//            ->hasTasks(3)
+//            ->hasProjects(3)
+//            ->create();
 
     }
 

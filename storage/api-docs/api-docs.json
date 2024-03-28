@@ -129,12 +129,11 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "john.doe@example.com"
+                                        "example": "matinnjt2000@gmail.com"
                                     },
                                     "password": {
                                         "type": "string",
-                                        "format": "password",
-                                        "example": ""
+                                        "format": "password"
                                     }
                                 },
                                 "type": "object"
@@ -805,7 +804,7 @@
                     }
                 ]
             },
-            "post": {
+            "put": {
                 "tags": [
                     "Tasks"
                 ],
@@ -825,7 +824,7 @@
                 ],
                 "requestBody": {
                     "content": {
-                        "multipart/form-data": {
+                        "application/x-www-form-urlencoded": {
                             "schema": {
                                 "required": [
                                     "title",
@@ -833,10 +832,6 @@
                                     "_method"
                                 ],
                                 "properties": {
-                                    "_method": {
-                                        "type": "string",
-                                        "default": "put"
-                                    },
                                     "title": {
                                         "type": "string",
                                         "example": "Daytask Project edit"

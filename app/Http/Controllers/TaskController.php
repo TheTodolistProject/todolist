@@ -8,8 +8,10 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\User;
 use App\Services\SearchTaskService;
+use Gate;
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
+use Illuminate\Auth\Access\Response;
 
 class TaskController extends Controller
 {
@@ -30,6 +32,7 @@ class TaskController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Task::class);
         $user = auth()->user();
         return TaskResource::collection($user->tasks()->with(['users','project'])->get());
     }
@@ -65,6 +68,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
+        $this->authorize('create', Task::class);
         $user = auth()->user();
         $task = Task::create($request->all());
        $saved =  $user->tasks()->save($task);
@@ -105,7 +109,7 @@ class TaskController extends Controller
     }
 
     /**
-     * @OA\Post(
+     * @OA\Put(
      *      path="/api/task/{task}",
      *      operationId="updateUserTask",
      *      tags={"Tasks"},
@@ -122,10 +126,9 @@ class TaskController extends Controller
      *          ),),
      *     @OA\RequestBody(
      *        @OA\MediaType(
-     *         mediaType="multipart/form-data",
+     *         mediaType="application/x-www-form-urlencoded",
      *     @OA\Schema(
      *             type="object",
-     *             @OA\Property(property="_method", type="string", default="put"),
      *             @OA\Property(property="title", type="string", example="Daytask Project edit"),
      *             @OA\Property(property="detail", type="text", example="Editting the detals"),
      *             @OA\Property (property="start_date" , type="date" , example="2026-02-10 12:00:00"),
@@ -142,13 +145,13 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-       $updated = $task->updateOrFail($request->all());
-        if ($updated){
-            return response()->json(['message' => 'task updated!'] , 200);
-        }
-        else{
-            return response()->json(['message' => 'error updating task!'] ,500);
-        }
+            $this->authorize('update', $task);
+            $updated = $task->updateOrFail($request->all());
+            if ($updated) {
+                return response()->json(['message' => 'task updated!'], 200);
+            } else {
+                return response()->json(['message' => 'error updating task!'], 500);
+            }
     }
 
     /**
@@ -177,6 +180,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $this->authorize('delete', $task);
         $deleted = $task->deleteOrFail();
         if ($deleted){
             return response()->json(['message' => 'task deleted!'] , 200);
@@ -252,25 +256,29 @@ class TaskController extends Controller
      *      ),
      *     )
      */
-    public function assignUser(Task $task , Request $request)
+    public function assignUser(Task $task , Request $request) : mixed
     {
-        $foundusers = collect();
+        if (auth()->user()->hasRole(['super_admin', 'manager']) || auth()->user()->tasks->contains($task)) {
 
-        foreach ($request->users as $slug){
-           $foundusers->push(User::where('slug' , $slug)->first()->id);
-        }
+            $foundusers = collect();
 
-        if ($foundusers->isEmpty()) {
-            return response()->json(['message' => 'users not found'] , 404);
+            foreach ($request->users as $slug) {
+                $foundusers->push(User::where('slug', $slug)->first()->id);
+            }
+
+            if ($foundusers->isEmpty()) {
+                return response()->json(['message' => 'users not found'], 404);
+            } else {
+                $done = $task->users()->syncWithoutDetaching($foundusers);
+                if ($done) {
+                    return response()->json(['message' => 'attached!'], 200);
+                } else {
+                    return response()->json(['message' => 'error attaching!'], 500);
+                }
+            }
         }
         else{
-            $done = $task->users()->syncWithoutDetaching($foundusers);
-            if ($done){
-                return response()->json(['message' => 'attached!'] , 200);
-            }
-            else{
-                return response()->json(['message' => 'error attaching!'] ,500);
-            }
+            return Response::denyWithStatus(401 , 'this action is unauthorized!');
         }
     }
     /**
@@ -302,12 +310,17 @@ class TaskController extends Controller
      */
     public function unassignUser(Task $task , User $user)
     {
-        $done = $task->users()->detach($user);
-        if ($done){
-            return response()->json(['message' => 'detached!'] , 200);
+        if (auth()->user()->hasRole(['super_admin', 'manager']) || auth()->user()->tasks->contains($task)) {
+
+            $done = $task->users()->detach($user);
+            if ($done) {
+                return response()->json(['message' => 'detached!'], 200);
+            } else {
+                return response()->json(['message' => 'error detaching!'], 500);
+            }
         }
         else{
-            return response()->json(['message' => 'error detaching!'] ,500);
+            return Response::denyWithStatus(401 , 'this action is unauthorized!');
         }
     }
 
